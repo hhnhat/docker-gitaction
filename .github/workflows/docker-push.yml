@@ -1,17 +1,12 @@
 name: Build and Push Docker Image (Manual)
 
-# This workflow runs ONLY when you manually trigger it
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Image tag to push (e.g. latest, 1.5.0, staging)'
-        required: false
+        description: 'Image tag (e.g. latest, v1.5.0, staging)'
+        required: true
         default: 'latest'
-      dockerfile:
-        description: 'Path to Dockerfile (default: ./Dockerfile)'
-        required: false
-        default: 'Dockerfile'
 
 jobs:
   build-and-push:
@@ -21,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Optional: Node setup if you want to run tests or build first
+      # Optional: Node.js setup + tests
       # - name: Setup Node.js
       #   uses: actions/setup-node@v4
       #   with:
@@ -31,7 +26,7 @@ jobs:
       # - name: Install dependencies
       #   run: npm ci
 
-      # - name: Run tests (optional – remove if not needed)
+      # - name: Run tests (remove if you don't have any)
       #   run: npm test
 
       # Login to Docker Hub
@@ -41,13 +36,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Build and push with the tag you entered manually hhnhat/docker-gitaction
+      # Set the full image name as an output (this is the trick!)
+      - name: Set Docker image name
+        run: |
+          echo "IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/hhnhat/docker-gitaction" >> $GITHUB_ENV
+        # ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+        # ← CHANGE "your-repo-name" to your actual Docker Hub repo name
+
+      # Build and push
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ${{ inputs.dockerfile }}
+          file: Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/hhnhat/docker-gitaction:${{ inputs.tag }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/hhnhat/docker-gitaction:latest   # always update latest too (optional)
+            ${{ env.IMAGE_NAME }}:${{ inputs.tag }}
+            ${{ env.IMAGE_NAME }}:latest
