@@ -22,17 +22,17 @@ jobs:
         uses: actions/checkout@v4
 
       # Optional: Node setup if you want to run tests or build first
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      #     cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      # - name: Install dependencies
+      #   run: npm ci
 
-      - name: Run tests (optional – remove if not needed)
-        run: npm test
+      # - name: Run tests (optional – remove if not needed)
+      #   run: npm test
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
@@ -49,5 +49,5 @@ jobs:
           file: ${{ inputs.dockerfile }}
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/your-repo-name:${{ inputs.tag }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/your-repo-name:latest   # always update latest too (optional)
+            ${{ secrets.DOCKERHUB_USERNAME }}/hhnhat/docker-gitaction:${{ inputs.tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/hhnhat/docker-gitaction:latest   # always update latest too (optional)
