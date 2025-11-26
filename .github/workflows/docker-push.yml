@@ -40,11 +40,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-        
+
       # Set the full image name as an output (this is the trick!)
       - name: Set Docker image name
         run: |
-          echo "IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/hhnhat/docker-gitaction" >> $GITHUB_ENV
+          echo "IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/docker-gitaction" >> $GITHUB_ENV
         # ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
         # ← CHANGE "your-repo-name" to your actual Docker Hub repo name
 
