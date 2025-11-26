@@ -6,7 +6,7 @@ on:
     inputs:
       tag:
         description: 'Image tag to push (e.g. latest, 1.5.0, staging)'
-        required: true
+        required: false
         default: 'latest'
       dockerfile:
         description: 'Path to Dockerfile (default: ./Dockerfile)'
